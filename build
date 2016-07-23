@@ -1,0 +1,3 @@
+elm-make --output dist/main.js frontend/App.elm
+sass -t compressed sass/main.sass dist/main.css
+uglify -s dist/main.js -o dist/main.js
