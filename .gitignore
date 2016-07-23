@@ -3,3 +3,10 @@
 elm-stuff/
 # elm-repl generated files
 repl-temp-*
+
+### Sass ###
+.sass-cache/
+*.css.map
+
+### Build ###
+/dist/
