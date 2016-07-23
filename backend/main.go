@@ -39,7 +39,7 @@ func (h Handler) Listen(conn *websocket.Conn) {
 
 		if err != nil {
 			log.Println(err)
-			continue
+			return
 		}
 
 		if msgType != websocket.TextMessage {
