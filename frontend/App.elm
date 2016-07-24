@@ -10,7 +10,7 @@ import Html.Events exposing (..)
 
 
 type alias Model =
-    { texts : List String
+    { messages : List String
     , input : String
     }
 
@@ -20,24 +20,24 @@ socketAddress =
     "ws://localhost:3000"
 
 
-type Message
-    = SocketMessage String
-    | Send
-    | Input String
-
-
 init : Model
 init =
-    { texts = []
+    { messages = []
     , input = ""
     }
 
 
-update : Message -> Model -> ( Model, Cmd Message )
+type Msg
+    = SocketMsg String
+    | Send
+    | Input String
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        SocketMessage str ->
-            ( { model | texts = model.texts ++ [ str ] }, Cmd.none )
+        SocketMsg str ->
+            ( { model | messages = model.messages ++ [ str ] }, Cmd.none )
 
         Send ->
             ( { model | input = "" }, WebSocket.send socketAddress model.input )
@@ -46,22 +46,22 @@ update msg model =
             ( { model | input = str }, Cmd.none )
 
 
-subscriptions : Model -> Sub Message
+subscriptions : Model -> Sub Msg
 subscriptions model =
-    WebSocket.listen socketAddress SocketMessage
+    WebSocket.listen socketAddress SocketMsg
 
 
-view : Model -> Html Message
+view : Model -> Html Msg
 view model =
     let
-        texts =
-            List.map (\x -> p [] [ text x ]) model.texts
+        messages =
+            List.map (\x -> p [] [ text x ]) model.messages
     in
         div [ class "container" ]
-            [ div [ class "texts" ] texts
+            [ div [ class "messages" ] messages
             , Html.form [ class "controls", onSubmit Send ]
                 [ input [ type' "text", onInput Input, value model.input ] []
-                , button [] [ text "send" ]
+                , button [ type' "submit" ] [ text "send" ]
                 ]
             ]
 
