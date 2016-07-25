@@ -20,11 +20,13 @@ socketAddress =
     "ws://localhost:3000"
 
 
-init : Model
+init : ( Model, Cmd Msg )
 init =
-    { messages = []
-    , input = ""
-    }
+    ( { messages = []
+      , input = ""
+      }
+    , Cmd.none
+    )
 
 
 type Msg
@@ -69,7 +71,7 @@ view model =
 main : Platform.Program Never
 main =
     program
-        { init = ( init, Cmd.none )
+        { init = init
         , update = update
         , subscriptions = subscriptions
         , view = view
